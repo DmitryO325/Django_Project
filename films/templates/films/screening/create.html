@@ -1,0 +1,45 @@
+{% extends 'films/base.html' %}
+{% load django_bootstrap5 %}
+{%load films_tags%}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_list' %}">
+                {{"films:screening"|model_verbose_name_plural}}
+            </a>
+        </li>
+        <li class="breadcrumb-item active">
+            Новый сеанс
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<h1>Новый сеанс</h1>
+<form method="GET" action="">
+    <div class="mb-3">
+        <label for="cinema_id" class="form-label">Кинотеатр</label>
+        <select id="cinema_id" name="cinema_id" class="form-select">
+            <option value="" disabled selected>Выберите кинотеатр</option>
+            {% for cinema in cinemas %}
+            <option value="{{ cinema.id }}" {% if selected_cinema == cinema.id %} selected {% endif %}>
+                {{ cinema.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-primary">Выбрать</button>
+</form>
+
+{% if selected_cinema %}
+<form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% bootstrap_form form%}
+    {{ form.media }}
+    {% bootstrap_button button_type="submit" content="Сохранить" %}
+</form>
+{% endif %}
+{% endblock %}

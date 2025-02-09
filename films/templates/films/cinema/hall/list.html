@@ -1,0 +1,25 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+
+{% block content %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cinema_list' %}">{{ 'films:cinema'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cinema_detail' cinema.id %}">{{ cinema.name }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ 'films:hall'|model_verbose_name_plural }}</li>
+    </ol>
+</nav>
+<h1>
+    {{'films:hall'|model_verbose_name_plural}}
+    {% if user.is_superuser %}
+    <a href="{% url 'films:hall_create' cinema.id %}" title="Добавить зал" class="btn btn-primary"><i
+            class="bi-plus-lg"></i></a>
+    {% endif %}
+</h1>
+{% include "films/cinema/halls.html"%}
+{% endblock %}

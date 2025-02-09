@@ -1,0 +1,13 @@
+{% extends 'films/base.html' %}
+
+{% block content %}
+<h1>Изменить цену для места {{ seat.row }}-{{ seat.seat }}</h1>
+
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+</form>
+
+<a href="{% url 'films:screening_detail' seat.screening.id %}" class="btn btn-secondary mt-2">Назад</a>
+{% endblock %}

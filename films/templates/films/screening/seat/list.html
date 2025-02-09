@@ -1,0 +1,50 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+{% load custom_filters %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_list' %}">{{ 'films:screening'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_detail' screening.id %}">{{ screening.hall.cinema.name }},
+                {{ screening.hall.name }} - {{ screening.film.name }} - {{ screening.start_time }}</a>
+        </li>
+        <li class="breadcrumb-item active">Бронирование</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<table style="border-spacing: 10px; border-collapse: separate;">
+    {% for row in rows|_range %}
+    <tr>
+        {% for seat in seats_per_row|_range %}
+        <td>
+            {% if seats|get_item:row|get_item:seat == 2 %}
+            <a href="{% url 'films:seat_detail' screening.id row seat %}" style="text-decoration: none;">
+                <button style="width: 50px; height: 50px; background-color: green;">
+                    {{ row }}.{{ seat }}
+                </button>
+            </a>
+            {% elif seats|get_item:row|get_item:seat == 1 %}
+            <a href="{% url 'films:seat_detail' screening.id row seat %}" style="text-decoration: none;">
+                <button style="width: 50px; height: 50px; background-color: yellow;">
+                    {{ row }}.{{ seat }}
+                </button>
+            </a>
+            {% else %}
+            <a href="{% url 'films:seat_detail' screening.id row seat %}" style="text-decoration: none;">
+                <button style="width: 50px; height: 50px; background-color: red;">
+                    {{ row }}.{{ seat }}
+                </button>
+            </a>
+            {% endif %}
+        </td>
+        {% endfor %}
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

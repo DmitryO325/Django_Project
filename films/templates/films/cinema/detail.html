@@ -1,0 +1,67 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cinema_list' %}">{{ 'films:cinema'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ cinema.name }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        {% if cinema.photo %}
+        <img src="{{ cinema.photo.url }}" alt="{{ cinema.name }}" class="img-thumbnail"/>
+        {% endif %}
+        {% if user.is_superuser %}
+        <div class="d-grid gap-2 my-4">
+            <a href="{% url 'films:cinema_update' cinema.id %}" class="btn btn-primary btn-block">
+                <i class="bi-pencil-square"></i>
+                Редактировать
+            </a>
+            <a href="{% url 'films:cinema_delete' cinema.id %}" class="btn btn-danger btn-block">
+                <i class="bi-trash"></i>
+                Удалить
+            </a>
+        </div>
+        {% endif %}
+        <div class="d-grid gap-2 my-4">
+            <a href="{% url 'films:hall_list' cinema.id %}" class="btn btn-warning btn-block">
+                <i class="bi-pencil-square"></i>
+                Информация о залах
+            </a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ cinema.name }}</h1>
+                <dl class="row">
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name cinema 'city' %}
+                    </dt>
+                    <dd class="col-md-9">{{ cinema.city }}</dd>
+
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name cinema 'address' %}
+                    </dt>
+                    <dd class="col-md-9">{{ cinema.address }}</dd>
+
+                    {% if cinema.description %}
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name cinema 'description' %}
+                    </dt>
+                    <dd class="col-md-9">{{ cinema.description }}</dd>
+                    {% endif %}
+                </dl>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

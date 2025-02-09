@@ -17,7 +17,7 @@ class Command(BaseCommand):
 
     @staticmethod
     def get_image_by_url(url):
-        img_tmp = NamedTemporaryFile(delete=True)
+        img_tmp = NamedTemporaryFile()
         try:
             with urlopen(url) as uo:
                 assert uo.status == 200
@@ -91,7 +91,7 @@ class Command(BaseCommand):
         return film
 
     def create_films(self):
-        with open(GetCommand.filename(), 'r') as f:
+        with open(GetCommand.filename(), 'r', encoding='utf-8') as f:
             films_data = json.load(f)
             for film_data in films_data['docs']:
                 self.create_film(film_data)

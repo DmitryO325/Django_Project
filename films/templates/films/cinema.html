@@ -1,0 +1,11 @@
+<div class="card h-100">
+    {% if cinema.photo %}
+    <img src="{{ cinema.photo.url }}" alt="{{ cinema.name }}" class="card-img-top"/>
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ cinema.name }}</h5>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'films:cinema_detail' cinema.id %}" class="text-decoration-none stretched-link">Подробнее</a>
+    </div>
+</div>

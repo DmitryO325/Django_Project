@@ -1,0 +1,16 @@
+{% load django_bootstrap5 %}
+
+{% if cinemas %}
+<div class="row">
+    {% for cinema in cinemas %}
+    <div class="col-md-3 py-2">
+        {% include "films/cinema.html" with cinema=cinema %}
+    </div>
+    {% endfor %}
+</div>
+<div class="my-4">
+    {% bootstrap_pagination cinemas %}
+</div>
+{% else %}
+<div class="alert alert-info">Кинотеатры не найдены</div>
+{% endif %}

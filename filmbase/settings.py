@@ -15,23 +15,22 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-oxnm+r_5an@uc6rwn5vz'\
-    '=k954e*01247lvck-=9@aq2d9lg18x'
+SECRET_KEY = 'django-insecure-oxnm+r_5an@uc6rwn5vz' \
+             '=k954e*01247lvck-=9@aq2d9lg18x'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
+    'django_extensions',
     'signup.apps.SignupConfig',
     'dal',
     'dal_select2',
@@ -75,7 +74,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'filmbase.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
@@ -86,29 +84,27 @@ DATABASES = {
     }
 }
 
-
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.UserAttributeSimilarityValidator',
+                '.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.MinimumLengthValidator',
+                '.MinimumLengthValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.CommonPasswordValidator',
+                '.CommonPasswordValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation'
-        '.NumericPasswordValidator',
+                '.NumericPasswordValidator',
     },
 ]
-
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -120,7 +116,6 @@ TIME_ZONE = 'Europe/Moscow'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/

@@ -1,0 +1,15 @@
+<div class="card h-100">
+    {% if screening.film.cover %}
+    <img src="{{ screening.film.cover.url }}" alt="{{ screening.film.name }}" class="card-img-top"/>
+    {% endif %}
+    <div class="card-body">
+        <h5 class="card-title">{{ screening.film.name }}</h5>
+    </div>
+    <div class="card-body">
+        <h6 class="card-title">{{ screening.start_time }}</h6>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'films:screening_detail' screening.id %}"
+           class="text-decoration-none stretched-link">Подробнее</a>
+    </div>
+</div>

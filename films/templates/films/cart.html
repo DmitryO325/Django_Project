@@ -1,0 +1,9 @@
+<div class="card h-100">
+    <div class="card-body">
+        <h5 class="card-title">{{ cart.name }}</h5>
+        <h6 class="class-title">Создано {{ cart.created_at }}</h6>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'films:cart_detail' cart.id %}" class="text-decoration-none stretched-link">Подробнее</a>
+    </div>
+</div>

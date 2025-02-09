@@ -1,0 +1,85 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_list' %}">{{ 'films:screening'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{screening.hall.cinema.name}}, {{screening.hall.name}} -
+            {{ screening.film.name }} - {{ screening.start_time }}
+        </li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        {% if screening.film.cover %}
+        <img src="{{ screening.film.cover.url }}" alt="{{ screening.film.name }}" class="img-thumbnail"/>
+        {% endif %}
+        {% if screening.hall.cinema.photo %}
+        <img src="{{ screening.hall.cinema.photo.url }}" alt="{{ screening.hall.cinema.name }}" class="img-thumbnail"/>
+        {% endif %}
+        {% if user.is_superuser %}
+        <div class="d-grid gap-2 my-4">
+            <a href="{% url 'films:screening_update' screening.id %}" class="btn btn-primary btn-block">
+                <i class="bi-pencil-square"></i>
+                Редактировать
+            </a>
+            <a href="{% url 'films:screening_delete' screening.id %}" class="btn btn-danger btn-block">
+                <i class="bi-trash"></i>
+                Удалить
+            </a>
+        </div>
+        {% endif %}
+        <div class="d-grid gap-2 my-4">
+            <a href="{% url 'films:seat_list' screening.id %}" class="btn btn-info btn-block">
+                Места в зале
+            </a>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Фильм: <a href="{% url 'films:film_detail' screening.film.id %}">
+                    {{ screening.film.name }}</a></h1>
+                <h2 class="card-title">Кинотеатр: <a href="{% url 'films:cinema_detail' screening.hall.cinema.id %}">
+                    {{ screening.hall.cinema.name }}</a></h2>
+                <h2 class="card-title">Зал:
+                    <a href="{% url 'films:hall_detail' screening.hall.cinema.id screening.hall.id %}">
+                        {{ screening.hall.name }}</a></h2>
+
+                <dl class="row">
+                    <dt class="col-md-3 text-md-end">
+                        Дата и время начала
+                    </dt>
+                    <dd class="col-md-9">
+                        {{ screening.start_time }}
+                    </dd>
+
+                    {% if screening.film.length %}
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name screening.film 'length' %}
+                    </dt>
+                    <dd class="col-md-9">
+                        {{ screening.film.length }}
+                        {{ screening.film.length|ru_plural:'минута,минуты,минут' }}
+                    </dd>
+                    {% endif %}
+
+                    {% if screening.film.description %}
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name screening.film 'description' %}
+                    </dt>
+                    <dd class="col-md-9">{{ screening.film.description }}</dd>
+                    {% endif %}
+                </dl>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

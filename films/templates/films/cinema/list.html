@@ -1,0 +1,14 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+
+{% block content %}
+<h1>
+    {{'films:cinema'|model_verbose_name_plural}}
+    {% if user.is_superuser %}
+    <a href="{% url 'films:cinema_create' %}" title="Добавить кинотеатр" class="btn btn-primary"><i
+            class="bi-plus-lg"></i></a>
+    {% endif %}
+</h1>
+{% include "films/cinemas.html"%}
+{% endblock %}

@@ -1,0 +1,9 @@
+<div class="card h-100">
+    <div class="card-body">
+        <h5 class="card-title">{{ hall.name }}</h5>
+    </div>
+    <div class="card-footer">
+        <a href="{% url 'films:hall_detail' cinema.id hall.id %}"
+           class="text-decoration-none stretched-link">Подробнее</a>
+    </div>
+</div>

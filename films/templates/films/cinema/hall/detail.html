@@ -1,0 +1,59 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cinema_list' %}">{{ 'films:cinema'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cinema_detail' cinema.id %}">{{ cinema.name }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:hall_list' cinema.id %}">{{ 'films:hall'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ hall.name }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        {% if user.is_superuser %}
+        <div class="d-grid gap-2 my-4">
+            <a href="{% url 'films:hall_update' cinema.id hall.id %}"
+               class="btn btn-primary btn-block">
+                <i class="bi-pencil-square"></i>
+                Редактировать
+            </a>
+            <a href="{% url 'films:hall_delete' cinema.id hall.id %}"
+               class="btn btn-danger btn-block">
+                <i class="bi-trash"></i>
+                Удалить
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">{{ cinema.name }}: {{ hall.name }}</h1>
+
+                <dl class="row">
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name hall 'rows' %}
+                    </dt>
+                    <dd class="col-md-9">{{ hall.rows }}</dd>
+
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name hall 'seats_per_row' %}
+                    </dt>
+                    <dd class="col-md-9">{{ hall.seats_per_row }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

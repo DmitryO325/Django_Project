@@ -1,0 +1,16 @@
+{% load django_bootstrap5 %}
+
+{% if carts %}
+<div class="row">
+    {% for cart in carts %}
+    <div class="col-md-3 py-2">
+        {% include "films/cart.html" with cart=cart %}
+    </div>
+    {% endfor %}
+</div>
+<div class="my-4">
+    {% bootstrap_pagination carts %}
+</div>
+{% else %}
+<div class="alert alert-info">Корзины не найдены</div>
+{% endif %}

@@ -1,0 +1,102 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+{% load custom_filters %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_list' %}">{{ 'films:screening'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:screening_detail' screening.id %}">{{ screening.hall.cinema.name }},
+                {{ screening.hall.name }} - {{ screening.film.name }} - {{ screening.start_time }}</a>
+        </li>
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:seat_list' screening.id %}">Места в зале</a>
+        </li>
+        <li class="breadcrumb-item active">{{ row }}.{{ seat }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        {% if screening.film.cover %}
+        <img src="{{ screening.film.cover.url }}" alt="{{ screening.film.name }}" class="img-thumbnail"/>
+        {% endif %}
+        {% if screening.hall.cinema.photo %}
+        <img src="{{ screening.hall.cinema.photo.url }}" alt="{{ screening.hall.cinema.name }}" class="img-thumbnail"/>
+        {% endif %}
+    </div>
+    <div class="col-md-9">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Фильм: <a href="{% url 'films:film_detail' screening.film.id %}">
+                    {{ screening.film.name }}</a></h1>
+                <h2 class="card-title">Кинотеатр: <a href="{% url 'films:cinema_detail' screening.hall.cinema.id %}">
+                    {{ screening.hall.cinema.name }}</a></h2>
+                <h2 class="card-title">Зал:
+                    <a href="{% url 'films:hall_detail' screening.hall.cinema.id screening.hall.id %}">
+                        {{ screening.hall.name }}</a></h2>
+
+                <dl class="row">
+                    <dt class="col-md-3 text-md-end">
+                        Дата и время начала
+                    </dt>
+                    <dd class="col-md-9">
+                        {{ screening.start_time }}
+                    </dd>
+
+                    {% if screening.film.length %}
+                    <dt class="col-md-3 text-md-end">
+                        {% verbose_name screening.film 'length' %}
+                    </dt>
+                    <dd class="col-md-9">
+                        {{ screening.film.length }}
+                        {{ screening.film.length|ru_plural:'минута,минуты,минут' }}
+                    </dd>
+                    {% endif %}
+
+                    <dt class="col-md-3 text-md-end">Ряд</dt>
+                    <dd class="col-md-9">{{ row }}</dd>
+
+                    <dt class="col-md-3 text-md-end">Место</dt>
+                    <dd class="col-md-9">{{ seat }}</dd>
+
+                    <dt class="col-md-3 text-md-end">Цена</dt>
+                    <dd class="col-md-9">{{ price }} рублей</dd>
+
+                    <dt class="col-md-3 text-md-end">Статус</dt>
+
+                    <dd class="col-md-9">
+                        {% if is_available %}
+                        <span style="color: green;">Свободно</span>
+                        {% else %}
+                        <span style="color: red;">Занято</span>
+                        {% endif %}
+                    </dd>
+                </dl>
+
+                {% if user.is_superuser %}
+                <a href="{% url 'films:seat_update' screening.id row seat %}" class="btn btn-warning">Изменить
+                    цену</a>
+                {% endif %}
+
+                {% if is_available %}
+                <a href="{% url 'films:cart_select' screening.id row seat %}"
+                   class="btn btn-success">Добавить в корзину</a>
+                {% else %}
+                <p>Это место уже занято</p>
+                {% endif %}
+
+                <div>
+                    <a href="{% url 'films:seat_list' screening.id %}"
+                       class="btn btn-primary">Вернуться к просмотру мест</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

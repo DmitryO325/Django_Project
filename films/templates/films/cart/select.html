@@ -1,0 +1,59 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cart_list' %}">{{ 'films:cart'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item active"></li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h2>Выберите корзину для добавления места</h2>
+            <p>Место: Ряд {{ row }}, Место {{ seat }} ({{ price }} рублей)</p>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <div class="card">
+                    <div class="card-header">
+                        Доступные корзины
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group">
+                            {% for cart in carts %}
+                            <li class="list-group-item">
+                                <label>
+                                    <input type="radio" name="cart_id" value="{{ cart.id }}">
+                                    <strong>{{ cart.name }}</strong> (Создана: {{ cart.created_at }})
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success">Добавить место в выбранную корзину</button>
+                </div>
+            </form>
+
+            <div class="mt-4">
+                <a href="{% url 'films:cart_create_with_seat' screening.id row seat %}"
+                   class="btn btn-primary">Создать новую корзину</a>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'films:seat_list' screening.id %}" class="btn btn-primary">Вернуться к выбору мест</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

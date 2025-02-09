@@ -1,0 +1,88 @@
+{% extends 'films/base.html' %}
+{% load films_tags %}
+
+{% block breadcrumb %}
+<nav>
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a href="{% url 'films:cart_list' %}">{{ 'films:cart'|model_verbose_name_plural }}</a>
+        </li>
+        <li class="breadcrumb-item active">{{ cart.name }}</li>
+    </ol>
+</nav>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-3">
+        <div class="d-grid gap-2 my-4">
+            {% if cart.is_booked %}
+            <form method="POST" action="{% url 'films:cart_cancel' cart.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-warning w-100">Отменить бронь</button>
+            </form>
+            {% else %}
+            <form method="POST" action="{% url 'films:cart_book' cart.id %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success w-100">Забронировать</button>
+            </form>
+            {% endif %}
+            <a href="{% url 'films:cart_update' cart.id %}" class="btn btn-primary btn- w-100">
+                <i class="bi-pencil-square"></i>
+                Переименовать
+            </a>
+            <a href="{% url 'films:cart_delete' cart.id %}" class="btn btn-danger btn-block w-100">
+                <i class="bi-trash"></i>
+                Удалить
+            </a>
+        </div>
+    </div>
+
+    <div class="col-md-9">
+        <h1>{{ cart.name }}</h1>
+        <p>Создана: {{ cart.created_at }}</p>
+
+        {% if cart.seats.count > 0 %}
+        {% for screening, seats in screenings.items %}
+        <h4><a href="{% url 'films:screening_detail' screening.id %}">{{ screening }}</a></h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Ряд</th>
+                <th>Место</th>
+                <th>Цена</th>
+                <th>Статус</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for seat in seats %}
+            <tr>
+                <td>{{ seat.row }}</td>
+                <td>{{ seat.seat }}</td>
+                <td>{{ seat.price }} рублей</td>
+                <td>
+                    {% if seat.is_booked %}
+                    <span class="badge bg-success">Забронировано</span>
+                    {% else %}
+                    <span class="badge bg-secondary">Свободно</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <form method="POST" action="{% url 'films:seat_delete' seat.screening.id seat.row seat.seat %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm">Удалить</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endfor %}
+
+        <h3>Итоговая стоимость: {{ total_cost }} рублей</h3>
+        {% else %}
+        <p>Корзина пуста</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
